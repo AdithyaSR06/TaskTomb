@@ -4,13 +4,37 @@
 
 using namespace std;
 
-//struct for the goal
+//class for goal
 //stores all the information linked to each individual goal
-struct Goal {
+class Goal {
+private:
 	string description;
 	bool completed;
 	int priority;
+public:
+	Goal(string desc, bool comp, int prio)
+		: description(desc), completed(comp), priority(prio)
+	{
+
+	}; //constructor
+
+	string getdescription() const {
+		return description;
+	}
+
+	bool getcompleted() const {
+		return completed;
+	}
+
+	int getpriority() const {
+		return priority;
+	}
+
+	void setcompleted(bool status) {
+		completed = status;
+	}
 };
+
 
 //function to display the title screen
 void displayTitle() {
@@ -25,9 +49,9 @@ void displayTitle() {
 void displayGoals(const vector<Goal>& GoalList) {
 	//loop through the vector and display each goal and its information
 	for (size_t i = 0; i < GoalList.size(); ++i) {
-		cout << "\nGoal: " << GoalList[i].description << "\n";
-		cout << "\nCompleted: " << boolalpha << GoalList[i].completed << "\n";
-		cout << "\npriority: " << GoalList[i].priority << "\n";
+		cout << "\nGoal: " << GoalList[i].getdescription() << "\n";
+		cout << "\nCompleted: " << boolalpha << GoalList[i].getcompleted() << "\n";
+		cout << "\nPriority: " << GoalList[i].getpriority() << "\n";
 	}
 }
 
@@ -85,18 +109,16 @@ int main() {
 	//goal setting
 	//loop twice to allow the user to enter their first two goals
 	for (int i = 0; i < 2; ++i) {
-		Goal goal;
+		
+		string description; //create temporary string to hold user input
+		 
 		cout << "\nWhat would you like to work on today?\n";
+		
+		getline(cin, description); //put description into string
 
-		//store the user's goal description
-		getline(cin, goal.description);
+		Goal goal(description, false, 1); //create goal objext using constructor
 
-		//set the default values for each new goal
-		goal.completed = false;
-		goal.priority = 1;
-
-		//add the Goal object to the vector
-		GoalList.push_back(goal);
+		GoalList.push_back(goal); //store the object in the vector
 	}
 
 	//selection statement
@@ -168,7 +190,7 @@ int main() {
 			//display all goals with numbers so the user can select one
 			for (size_t i = 0; i < GoalList.size(); ++i) {
 				//add 1 because vector indexes start at 0 but user selections start at 1
-				cout << i + 1 << "\nGoal: " << GoalList[i].description << "\n";
+				cout << i + 1 << "\nGoal: " << GoalList[i].getdescription() << "\n";
 			}
 
 			//check that the selected number is within the range of goals in the vector
@@ -204,10 +226,10 @@ int main() {
 
 			//update the completed status of the selected goal depending on the answer
 			if (goalStatus == "Yes") {
-				GoalList[goalIndex].completed = true;
+				GoalList[goalIndex].setcompleted(true);
 			}
 			else if (goalStatus == "No") {
-				GoalList[goalIndex].completed = false;
+				GoalList[goalIndex].setcompleted(false);
 			}
 		
         break;
@@ -215,20 +237,20 @@ int main() {
 
 		case 6:
 		{
-			//create a new Goal object to store the user's new goal
-			Goal newgoal;
+
 
 			//remove the leftover newline from the previous cin input
 			cin.ignore();
 
+			string description;
+
 			cout << "Please enter a new goal";
 
 			//get the full goal description, including spaces
-			getline(cin, newgoal.description);
+			getline(cin, description);
 
 			//set the default values for the new goal
-			newgoal.completed = false;
-			newgoal.priority = 1;
+			Goal newgoal(description, false, 1);
 
 			//add the new goal to the existing vector
 			GoalList.push_back(newgoal);
